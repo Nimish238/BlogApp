@@ -40,5 +40,4 @@ public class post {
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private Set<comment> comments=new HashSet<>();
 
-
 }

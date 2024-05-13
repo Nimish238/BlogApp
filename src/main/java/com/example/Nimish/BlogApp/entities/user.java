@@ -8,26 +8,44 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
 @Setter
 @Getter
-
-public class user implements UserDetails {
+public class user  implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
 
     @Column(name = "user_name",nullable = false)
     private String name;
 
+    @Getter
     @Column(name = "user_email",nullable = false)
     private String email;
+
+    public void setEmail(String email){
+        this.email=email.toLowerCase();
+    }
+
+    public void setName(String name){
+        this.name=name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAbout(String about){
+        this.about=about;
+    }
 
     @Column(name = "user_password",nullable = false)
     private String password;
@@ -49,14 +67,21 @@ public class user implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         List<SimpleGrantedAuthority> authorities= this.roles.stream()
-                .map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+                .map((role) ->new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
         return authorities;
     }
 
     @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
     public String getUsername() {
-        return this.name;
+        return this.email;
     }
 
     @Override

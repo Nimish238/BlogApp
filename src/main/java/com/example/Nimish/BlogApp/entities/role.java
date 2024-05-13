@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+
 @Entity
 @Data
 public class role {
@@ -15,4 +16,8 @@ public class role {
     private int id;
 
     private String name;
+
+    public String getName() {
+        return this.name;
+    }
 }

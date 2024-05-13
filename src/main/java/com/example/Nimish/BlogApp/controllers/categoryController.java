@@ -52,7 +52,7 @@ public class categoryController {
     }
 
 
-    //get
+    //get by id
     @GetMapping("/{categoryId}")
     public ResponseEntity<categoryDto> getCategory(@PathVariable Integer categoryId){
 
