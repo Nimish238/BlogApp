@@ -1,12 +1,16 @@
 package com.example.Nimish.BlogApp.services.impl;
 
+import com.example.Nimish.BlogApp.config.appConstants;
+import com.example.Nimish.BlogApp.entities.role;
 import com.example.Nimish.BlogApp.entities.user;
 import com.example.Nimish.BlogApp.exceptions.ResourceNotFoundException;
 import com.example.Nimish.BlogApp.payloads.userDto;
+import com.example.Nimish.BlogApp.repositories.roleRepo;
 import com.example.Nimish.BlogApp.repositories.userRepo;
 import com.example.Nimish.BlogApp.services.userService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +25,29 @@ public class userServiceImpl implements userService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private roleRepo roleRepo;
+
+    @Override
+    public userDto registerNewUser(userDto userDto) {
+
+        user user = this.modelMapper.map(userDto,user.class);
+
+        //encode password
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        //roles
+        role role = this.roleRepo.findById(appConstants.NORMAL_USER).get();
+        user.getRoles().add(role);
+
+        user newUser = this.userRepo.save(user);
+
+        return this.modelMapper.map(newUser,userDto.class);
+    }
 
     @Override
     public userDto createUser(userDto userDto) {

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class user  implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id ;
 
     @Column(name = "user_name",nullable = false)
@@ -53,16 +53,16 @@ public class user  implements UserDetails {
     private String about;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private Set<comment> comments = new HashSet<>();
+    private Set<comment> comments = new HashSet<comment>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<post> posts = new ArrayList<>();
+    private List<post> posts = new ArrayList<post>();
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role",referencedColumnName = "id"))
-    private Set<role> roles = new HashSet<>();
+    private Set<role> roles = new HashSet<role>();
 
 
     @Override
@@ -102,5 +102,14 @@ public class user  implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public Set<role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<role> roles) {
+        this.roles = roles;
     }
 }

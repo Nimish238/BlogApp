@@ -1,9 +1,12 @@
 package com.example.Nimish.BlogApp.controllers;
 
 
+import com.example.Nimish.BlogApp.exceptions.apiException;
 import com.example.Nimish.BlogApp.payloads.JwtAuthRequest;
 import com.example.Nimish.BlogApp.payloads.JwtAuthResponse;
+import com.example.Nimish.BlogApp.payloads.userDto;
 import com.example.Nimish.BlogApp.security.JwtTokenHelper;
+import com.example.Nimish.BlogApp.services.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private userService userService;
+
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> createToken(
             @RequestBody JwtAuthRequest request
@@ -51,12 +57,16 @@ public class AuthController {
         try{
             this.authenticationManager.authenticate(authenticationToken);
         }catch(BadCredentialsException e){
-            System.out.println("Invalid Details!");
-            throw new Exception("Invalid username or password");
+
+            throw new apiException("Invalid username or password");
         }
 
+    }
 
-
+    @PostMapping("/register")
+    public ResponseEntity<userDto> registerUser(@RequestBody userDto userDto){
+        userDto registeredUser = this.userService.registerNewUser(userDto);
+        return new ResponseEntity<userDto>(registeredUser,HttpStatus.CREATED);
     }
 
 
