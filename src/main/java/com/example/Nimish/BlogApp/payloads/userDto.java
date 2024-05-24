@@ -26,8 +26,7 @@ public class userDto {
     @Size(min=3,max=10,message = "Password must be min of 3 characters and max of 10 characters")
     private String password;
 
-    @NotEmpty
-    private String about;
+
 
     public String getName() {
         return name;
@@ -41,8 +40,6 @@ public class userDto {
         return password;
     }
 
-    public String getAbout() {
-        return about;
-    }
+
 
 }

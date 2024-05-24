@@ -2,10 +2,8 @@ package com.example.Nimish.BlogApp.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +21,6 @@ public class JwtTokenHelper {
 //    private final String secret = "jwtTokenKey";
 
     private String secret = "2f2b87aa599c249678758594f342b4dcb8767ae2c64ff0c54d45bfc80dc81477";
-
-
-
 
 
     //retrieve token from jwt token
@@ -84,7 +79,6 @@ public class JwtTokenHelper {
         byte[] keyBytes = Decoders.BASE64URL.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 
 
     //validate token

@@ -31,6 +31,10 @@ public class user  implements UserDetails {
     @Column(name = "user_email",nullable = false)
     private String email;
 
+    @Column(name = "user_password",nullable = false)
+    private String password;
+
+
     public void setEmail(String email){
         this.email=email.toLowerCase();
     }
@@ -43,14 +47,8 @@ public class user  implements UserDetails {
         this.password = password;
     }
 
-    public void setAbout(String about){
-        this.about=about;
-    }
 
-    @Column(name = "user_password",nullable = false)
-    private String password;
 
-    private String about;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<comment> comments = new HashSet<comment>();
@@ -58,7 +56,7 @@ public class user  implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<post> posts = new ArrayList<post>();
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role",referencedColumnName = "id"))

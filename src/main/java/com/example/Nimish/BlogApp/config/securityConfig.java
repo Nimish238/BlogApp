@@ -38,7 +38,7 @@ public class securityConfig  {
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
           http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)  //cross site request forgery
 
                 .authorizeHttpRequests(
                     req -> req.requestMatchers("/api/auth/**").permitAll()

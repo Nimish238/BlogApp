@@ -2,11 +2,10 @@ package com.example.Nimish.BlogApp.controllers;
 
 
 import com.example.Nimish.BlogApp.exceptions.apiException;
-import com.example.Nimish.BlogApp.payloads.JwtAuthRequest;
-import com.example.Nimish.BlogApp.payloads.JwtAuthResponse;
-import com.example.Nimish.BlogApp.payloads.userDto;
+import com.example.Nimish.BlogApp.payloads.*;
 import com.example.Nimish.BlogApp.security.JwtTokenHelper;
 import com.example.Nimish.BlogApp.services.userService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,21 +51,45 @@ public class AuthController {
 
     private void authenticate(String username, String password) throws Exception {
 
-        UsernamePasswordAuthenticationToken authenticationToken =new UsernamePasswordAuthenticationToken(username,password);
+        UsernamePasswordAuthenticationToken authenticationToken =new
+                UsernamePasswordAuthenticationToken(username,password);
 
         try{
             this.authenticationManager.authenticate(authenticationToken);
         }catch(BadCredentialsException e){
-
             throw new apiException("Invalid username or password");
         }
 
     }
 
     @PostMapping("/register")
-    public ResponseEntity<userDto> registerUser(@RequestBody userDto userDto){
-        userDto registeredUser = this.userService.registerNewUser(userDto);
-        return new ResponseEntity<userDto>(registeredUser,HttpStatus.CREATED);
+    public ResponseEntity<userDto> registerUser(@Valid @RequestBody userDto userDto){
+
+
+            try {
+                if(userService.checkUniqueEmail(userDto.getEmail())) {
+                   throw new Exception("Email already exists,try another one!");
+
+                }
+                    userDto registeredUser = this.userService.registerNewUser(userDto);
+                    return new ResponseEntity<userDto>(registeredUser,HttpStatus.CREATED);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<responseDto>  resetPassword(@RequestBody JwtAuthRequest request){
+
+        try{
+            String response = this.userService.resetPassword(request)?
+                    "Password changed successfully!!" :"Enter correct email address";
+            return new ResponseEntity<>(new responseDto(null,response,false),HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(new responseDto(null,e.getMessage(),true),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

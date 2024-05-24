@@ -4,6 +4,7 @@ import com.example.Nimish.BlogApp.config.appConstants;
 import com.example.Nimish.BlogApp.entities.role;
 import com.example.Nimish.BlogApp.entities.user;
 import com.example.Nimish.BlogApp.exceptions.ResourceNotFoundException;
+import com.example.Nimish.BlogApp.payloads.JwtAuthRequest;
 import com.example.Nimish.BlogApp.payloads.userDto;
 import com.example.Nimish.BlogApp.repositories.roleRepo;
 import com.example.Nimish.BlogApp.repositories.userRepo;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,8 +43,9 @@ public class userServiceImpl implements userService {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         //roles
-        role role = this.roleRepo.findById(appConstants.NORMAL_USER).get();
+        role role = this.roleRepo.findById(appConstants.ROLE_NORMAL).get();
         user.getRoles().add(role);
+
 
         user newUser = this.userRepo.save(user);
 
@@ -52,11 +55,19 @@ public class userServiceImpl implements userService {
     @Override
     public userDto createUser(userDto userDto) {
 
-        user user = this.dtoToUser(userDto);
+//        user user = this.dtoToUser(userDto);
+
+        user user = this.modelMapper.map(userDto,user.class);
+
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        role role = this.roleRepo.findById(appConstants.ROLE_NORMAL).get();
+        user.getRoles().add(role);
+
 
         user savedUser = this.userRepo.save(user);
 
-        return this.userToDto(savedUser);
+        return this.modelMapper.map(savedUser,userDto.class);
 
     }
 
@@ -68,9 +79,7 @@ public class userServiceImpl implements userService {
 
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setAbout(userDto.getAbout());
-
+        user.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
 
         user updatedUser = this.userRepo.save(user);
 
@@ -103,31 +112,35 @@ public class userServiceImpl implements userService {
 
     }
 
+    @Override
+    public boolean resetPassword(JwtAuthRequest request) {
+
+        Optional<user> u = this.userRepo.findByEmail(request.getUsername());
+        if(u.isPresent()){
+            user usr = this.userRepo.findByEmail(request.getUsername()).orElseThrow(() ->new ResourceNotFoundException("user","username"+request.getUsername(),0));
+            usr.setPassword(passwordEncoder.encode(request.getPassword()));
+            this.userRepo.save(usr);
+            return true;
+        }
+        return false;
+    }
+
     public user dtoToUser(userDto userDto){
 
-//        user user= new user();
-//        user.setId(userDto.getId());
-//        user.setName(userDto.getName());
-//        user.setEmail(userDto.getEmail());
-//        user.setAbout(userDto.getAbout());
-//        user.setPassword(userDto.getPassword());
-
         user user = this.modelMapper.map(userDto,user.class);
-
         return user;
     }
 
     public userDto userToDto(user user){
 
-//        userDto userDto = new userDto();
-//        userDto.setId(user.getId());
-//        userDto.setName(user.getName());
-//        userDto.setEmail(user.getEmail());
-//        userDto.setPassword(user.getPassword());
-//        userDto.setAbout(user.getAbout());
-
         userDto userDto = this.modelMapper.map(user,userDto.class);
 
         return userDto;
+    }
+
+    public boolean checkUniqueEmail(String email){
+
+        Optional<user> u = this.userRepo.findByEmail(email);
+        return u.isPresent();
     }
 }
