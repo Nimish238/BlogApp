@@ -15,6 +15,8 @@ public interface userService {
 
     userDto getUserById(Integer userId);
 
+    Integer getUserId(String userName);
+
     List<userDto> getAllUsers();
 
     void deleteUser(Integer userId);

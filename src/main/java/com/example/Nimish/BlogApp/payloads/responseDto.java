@@ -17,4 +17,9 @@ public class responseDto {
     private boolean hasError;
 
 
+    public responseDto(JwtAuthResponse response, String tokenGeneratedSuccessfully, boolean b) {
+        this.data = response; // Assuming 'response' is the data you want to pass
+        this.message = tokenGeneratedSuccessfully;
+        this.hasError = hasError;
+    }
 }

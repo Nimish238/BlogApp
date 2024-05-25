@@ -55,15 +55,12 @@ public class userServiceImpl implements userService {
     @Override
     public userDto createUser(userDto userDto) {
 
-//        user user = this.dtoToUser(userDto);
-
         user user = this.modelMapper.map(userDto,user.class);
 
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
-        role role = this.roleRepo.findById(appConstants.ROLE_NORMAL).get();
+        role role = this.roleRepo.findById(appConstants.ROLE_ADMIN).get();
         user.getRoles().add(role);
-
 
         user savedUser = this.userRepo.save(user);
 
@@ -93,6 +90,14 @@ public class userServiceImpl implements userService {
                 .orElseThrow(()->new ResourceNotFoundException("user" ,"id", userId));
         return this.userToDto(user);
     }
+
+    @Override
+    public Integer getUserId(String userName) {
+        user user = this.userRepo.findByEmail(userName)
+                .orElseThrow(() -> new ResourceNotFoundException("user","username"+userName,0));
+        return user.getId();
+    }
+
 
     @Override
     public List<userDto> getAllUsers() {

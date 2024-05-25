@@ -2,7 +2,6 @@ package com.example.Nimish.BlogApp.payloads;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +39,10 @@ public class userDto {
         return password;
     }
 
+
+    public void setEmail(String email) {
+        this.email=email;
+    }
 
 
 }

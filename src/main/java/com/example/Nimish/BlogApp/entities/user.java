@@ -56,9 +56,11 @@ public class user  implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<post> posts = new ArrayList<post>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)     //The EAGER strategy is a requirement on the persistence provider runtime that data must be eagerly fetched. The FetchType.LAZY strategy is a hint to the persistence provider runtime that data should be fetched lazily when it is first accessed.
     @JoinTable(name = "user_role",
+
             joinColumns = @JoinColumn(name = "user",referencedColumnName = "id"),
+
             inverseJoinColumns = @JoinColumn(name = "role",referencedColumnName = "id"))
     private Set<role> roles = new HashSet<role>();
 
@@ -110,4 +112,11 @@ public class user  implements UserDetails {
     public void setRoles(Set<role> roles) {
         this.roles = roles;
     }
+
+
+    public Integer getId() {
+        return id;
+    }
+
+
 }
