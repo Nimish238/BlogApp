@@ -5,7 +5,6 @@ import com.example.Nimish.BlogApp.exceptions.apiException;
 import com.example.Nimish.BlogApp.payloads.*;
 import com.example.Nimish.BlogApp.security.JwtTokenHelper;
 import com.example.Nimish.BlogApp.services.userService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +47,8 @@ public class AuthController {
             response.setId(this.userService.getUserId(request.getUsername()));
             response.setUsername(request.getUsername());
             response.setToken(token);
+            response.setRole(userDetails.getAuthorities());
+
 
             return new ResponseEntity<>(new responseDto(response,"Token generated successfully",false), HttpStatus.OK);
 
@@ -58,10 +59,8 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/register")
     public ResponseEntity<responseDto> registerUser(@Valid @RequestBody userDto userDto){
-
 
             try {
                 if(userService.checkUniqueEmail(userDto.getEmail())) {
@@ -77,6 +76,7 @@ public class AuthController {
                 response.setId(this.userService.getUserId(userDetails.getUsername()));
                 response.setUsername(userDto.getEmail());
                 response.setToken(token);
+                response.setRole(userDetails.getAuthorities());
 
 
                 return new ResponseEntity<responseDto>(new responseDto(response,"User created successfully!!",false),HttpStatus.CREATED);
@@ -98,6 +98,7 @@ public class AuthController {
             return new ResponseEntity<>(new apiResponse(e.getMessage(),false),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     private void authenticate(String username, String password) throws Exception {
 

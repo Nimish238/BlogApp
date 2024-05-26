@@ -1,13 +1,11 @@
 package com.example.Nimish.BlogApp.payloads;
 
 import lombok.Data;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-;import java.util.Collection;
+import java.util.Collection;
 
 
 @Data
-@Setter
 public class JwtAuthResponse {
 
     private String token;
@@ -16,13 +14,12 @@ public class JwtAuthResponse {
 
     private Integer id;
 
-//    private Collection<? extends GrantedAuthority> role;
+    private Collection<? extends GrantedAuthority> role;
 
     public void setToken(String token) {
         this.token = token;
 
     }
-
 
     public void setUsername(String username) {
         this.userName = username;
@@ -35,5 +32,9 @@ public class JwtAuthResponse {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setRole(Collection<? extends GrantedAuthority> role) {
+        this.role = role;
     }
 }

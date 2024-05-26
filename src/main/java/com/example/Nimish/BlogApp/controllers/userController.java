@@ -51,7 +51,7 @@ public class userController {
             response.setId(this.userService.getUserId(userDetails.getUsername()));
             response.setUsername(userDto.getEmail());
             response.setToken(token);
-;
+            response.setRole(userDetails.getAuthorities());
 
 
             return new ResponseEntity<responseDto>(new responseDto(response,"User created successfully!!",false), HttpStatus.CREATED);
