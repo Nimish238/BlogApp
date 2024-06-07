@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class BlogAppApplication implements CommandLineRunner {
