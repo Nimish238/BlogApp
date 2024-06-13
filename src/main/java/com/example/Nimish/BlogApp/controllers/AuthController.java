@@ -49,7 +49,6 @@ public class AuthController {
             response.setToken(token);
             response.setRole(userDetails.getAuthorities());
 
-
             return new ResponseEntity<>(new responseDto(response,"Token generated successfully",false), HttpStatus.OK);
 
         }catch(Exception e){
