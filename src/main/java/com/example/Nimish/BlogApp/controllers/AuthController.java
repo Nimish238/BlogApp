@@ -1,11 +1,13 @@
 package com.example.Nimish.BlogApp.controllers;
 
+import com.example.Nimish.BlogApp.entities.user;
 import com.example.Nimish.BlogApp.payloads.responseDto;
 import com.example.Nimish.BlogApp.exceptions.apiException;
 import com.example.Nimish.BlogApp.payloads.*;
 import com.example.Nimish.BlogApp.security.JwtTokenHelper;
 import com.example.Nimish.BlogApp.services.userService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -35,6 +38,10 @@ public class AuthController {
     @Autowired
     private userService userService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+
     @PostMapping("/login")
     public ResponseEntity<responseDto> createToken(@RequestBody JwtAuthRequest request) {
 
@@ -43,11 +50,16 @@ public class AuthController {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
             String token =  this.jwtTokenHelper.generateToken(userDetails);
 
+
             JwtAuthResponse response = new JwtAuthResponse();
             response.setId(this.userService.getUserId(request.getUsername()));
             response.setUsername(request.getUsername());
             response.setToken(token);
             response.setRole(userDetails.getAuthorities());
+            response.setName(this.userService.getUserName(request.getUsername()));
+
+//            response.setUser(this.modelMapper.map((user)userDetails, userDto.class));
+
 
             return new ResponseEntity<>(new responseDto(response,"Token generated successfully",false), HttpStatus.OK);
 

@@ -98,6 +98,13 @@ public class userServiceImpl implements userService {
         return user.getId();
     }
 
+    @Override
+    public String getUserName(String userName) {
+        user user = this.userRepo.findByEmail(userName)
+                .orElseThrow(() -> new ResourceNotFoundException("user","username" + userName,0));
+        return user.getName();
+    }
+
 
     @Override
     public List<userDto> getAllUsers() {

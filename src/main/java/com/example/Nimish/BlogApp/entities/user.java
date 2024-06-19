@@ -43,6 +43,10 @@ public class user  implements UserDetails {
         this.name=name;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
