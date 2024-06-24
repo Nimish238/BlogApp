@@ -13,4 +13,9 @@ public class commentDto {
 
     private String content;
 
+    private int user_id;
+
+    public void setUserId(Integer id) {
+        this.user_id=id;
+    }
 }

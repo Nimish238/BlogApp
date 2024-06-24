@@ -22,10 +22,11 @@ public class commentController {
                                                     @PathVariable Integer postId,
                                                     @PathVariable Integer id)
     {
-
         commentDto createComment= this.commentService.createComment(comment,postId,id);
+        createComment.setUserId(id);
         return new ResponseEntity<commentDto>(createComment, HttpStatus.CREATED);
     }
+
 
     @DeleteMapping("/user/{id}/post/{postId}/comments/{commentId}")
     public ResponseEntity<apiResponse> deleteComment(@PathVariable Integer commentId,

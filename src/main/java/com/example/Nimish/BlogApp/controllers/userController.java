@@ -82,11 +82,9 @@ public class userController {
         }catch(Exception e){
             throw new apiException(e.getMessage());
         }
-
     }
 
     //DELETE - delete user
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/deleteUser/{userId}")
     public ResponseEntity<apiResponse> deleteUser( @PathVariable("userId") Integer uId){
         this.userService.deleteUser(uId);
@@ -94,6 +92,7 @@ public class userController {
     }
 
     //GET - get user
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllUsers/")
     public ResponseEntity<List<userDto>> getAllUsers(){
         return ResponseEntity.ok(this.userService.getAllUsers());

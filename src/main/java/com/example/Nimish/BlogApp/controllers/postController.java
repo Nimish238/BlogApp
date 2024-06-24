@@ -47,25 +47,15 @@ public class postController {
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<postDto> createPost(
                                               @RequestParam("postData")String postData,
-
                                               @PathVariable Integer userId,
                                               @PathVariable Integer categoryId,
                                               @RequestParam(value = "image",required = false)MultipartFile image
                                              )throws IOException
     {
-
-
-        postDto convertedData=null;
-//        try{
+            postDto convertedData=null;
             convertedData =  mapper.readValue(postData,postDto.class);
             postDto createPost = this.postService.createPost(convertedData, userId, categoryId,path,image);
             return new ResponseEntity<postDto>(createPost, HttpStatus.CREATED);
-//        }
-
-//        catch (Exception e) {
-//
-//            return  new ResponseEntity.status( HttpStatus.BAD_REQUEST).body("Invalid Request");
-//        }
     }
 
     //upload image
