@@ -61,7 +61,7 @@ public class postController {
     //upload image
     @PostMapping("/post/image/upload/{postId}")
     public ResponseEntity<postDto> uploadPostImage(
-            @RequestParam("image")MultipartFile image,
+            @RequestParam(value = "image",required = false)MultipartFile image,
             @PathVariable Integer postId
     )throws IOException
     {
@@ -69,10 +69,19 @@ public class postController {
         String fileName=this.fileService.uploadImage(path,image);
 
         postDto.setImageName(fileName);
-        postDto updatePost = this.postService.updatePost(postDto,postId);
+        postDto updatePost = this.fileService.updatePostImage(postDto,postId);
         return new ResponseEntity<postDto>(updatePost,HttpStatus.OK);
 
     }
+
+    //update post
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<postDto> updatePost(@RequestBody postDto postDto,@PathVariable Integer postId){
+        postDto updatePost = this.postService.updatePost(postDto ,postId);
+        return new ResponseEntity<postDto>(updatePost,HttpStatus.OK);
+    }
+
+
 
     //get By user
     @GetMapping("/user/{userId}/posts")
@@ -117,12 +126,7 @@ public class postController {
         return new apiResponse("Post is successfully deleted",true);
     }
 
-    //update post
-    @PutMapping("/posts/{postId}")
-    public ResponseEntity<postDto> updatePost(@RequestBody postDto postDto,@PathVariable Integer postId){
-        postDto updatePost = this.postService.updatePost(postDto ,postId);
-        return new ResponseEntity<postDto>(updatePost,HttpStatus.OK);
-    }
+
 
     //search
     @GetMapping("/posts/search/{keywords}")

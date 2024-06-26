@@ -16,8 +16,8 @@ public interface postService {
 
     //create
     postDto createPost(postDto postDto,Integer userId,Integer categoryId,String path, MultipartFile file)throws IOException;
-
     InputStream getResource(String path,String fileName)throws FileNotFoundException;
+
     //update
     postDto updatePost(postDto postDto , Integer postId);
 
@@ -39,8 +39,7 @@ public interface postService {
     //search posts
     List<postDto> searchPosts(String keyword);
 
-//    String uploadImage(String path, MultipartFile file )throws IOException;
-//    InputStream getResource(String path, String fileName)throws FileNotFoundException;
+
 
 
 }

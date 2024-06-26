@@ -114,7 +114,7 @@ public class postServiceImpl implements postService {
 
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setImageName(postDto.getImageName());
+//        post.setImageName(postDto.getImageName());
 
         post updatedPost = this.postRepo.save(post);
 
@@ -198,4 +198,7 @@ public class postServiceImpl implements postService {
        List<postDto> postDos= posts.stream().map((post) ->this.modelMapper.map(post, postDto.class)).collect(Collectors.toList());
         return postDos;
     }
+
+
+
 }

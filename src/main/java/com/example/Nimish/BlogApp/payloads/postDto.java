@@ -28,4 +28,9 @@ public class postDto {
     private userDto user;
 
     private Set<commentDto> comments = new HashSet<>();
+
+    public void setImageName(String fileName) {
+        this.imageName=fileName;
+    }
+
 }
