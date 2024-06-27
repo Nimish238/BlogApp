@@ -11,7 +11,7 @@ public class JwtAuthResponse {
 
     private String token;
 
-    private String userName;
+    private String username;
 
     private Integer id;
 
@@ -32,7 +32,7 @@ public class JwtAuthResponse {
     }
 
     public void setUsername(String username) {
-        this.userName = username;
+        this.username = username;
     }
 
 

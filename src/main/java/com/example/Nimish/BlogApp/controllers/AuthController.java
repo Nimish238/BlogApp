@@ -58,15 +58,11 @@ public class AuthController {
             response.setRole(userDetails.getAuthorities());
             response.setName(this.userService.getUserName(request.getUsername()));
 
-//            response.setUser(this.modelMapper.map((user)userDetails, userDto.class));
-
-
             return new ResponseEntity<>(new responseDto(response,"Token generated successfully",false), HttpStatus.OK);
 
         }catch(Exception e){
             return new ResponseEntity<>(new responseDto(null,e.getMessage(),true),HttpStatus.NOT_FOUND);
         }
-
     }
 
 
@@ -89,13 +85,11 @@ public class AuthController {
                 response.setToken(token);
                 response.setRole(userDetails.getAuthorities());
 
-
                 return new ResponseEntity<responseDto>(new responseDto(response,"User created successfully!!",false),HttpStatus.CREATED);
 
             } catch (Exception e) {
                 throw new apiException(e.getMessage());
             }
-
     }
 
     @PostMapping("/resetPassword")
