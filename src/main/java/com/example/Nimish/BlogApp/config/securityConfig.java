@@ -45,7 +45,6 @@ public class securityConfig  {
                             .requestMatchers(HttpMethod.GET).permitAll()
                             .anyRequest()
                             .authenticated()
-
                     )
                 .exceptionHandling((exception) ->exception.authenticationEntryPoint(this.jwtAuthenticationEntryPoint))
                 .sessionManagement(sessionManagement ->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

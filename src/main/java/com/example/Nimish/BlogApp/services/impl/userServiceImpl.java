@@ -127,8 +127,10 @@ public class userServiceImpl implements userService {
     @Override
     public boolean resetPassword(JwtAuthRequest request) {
 
-        Optional<user> u = this.userRepo.findByEmail(request.getUsername());
-        if(u.isPresent()){
+//        Optional<user> u = this.userRepo.findByEmail(request.getUsername());
+
+        if(this.checkUniqueEmail(request.getUsername())){
+//        if(u.isPresent()){
             user usr = this.userRepo.findByEmail(request.getUsername()).orElseThrow(() ->new ResourceNotFoundException("user","username"+request.getUsername(),0));
             usr.setPassword(passwordEncoder.encode(request.getPassword()));
             this.userRepo.save(usr);
